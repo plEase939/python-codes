@@ -1,12 +1,15 @@
 import random
 
+#Global Variables
 play =1
 playerScore = 0
 computerScore = 0
 
+
 possibleActions = ("rock", "paper", "scissor")
 
-while play == 1:
+#Game Logic
+while True:
     play = input("Play? y/n: ")
     if play.upper() != "N":
         play = 1
@@ -34,3 +37,4 @@ while play == 1:
         print("you chose " + userAction + " computer chose " + computerAction + " \n You Lose!")
         computerScore += 1
         print("Score: " + " Your Score: " + str(playerScore) + " Computer Score: " + str(computerScore))
+print("Thank you for playing <3 ")
