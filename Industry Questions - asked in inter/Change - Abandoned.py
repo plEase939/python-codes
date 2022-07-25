@@ -1,4 +1,6 @@
-
+#This program was a industry question in an interview
+#Question is to enter Currency denominations for eg. [5,6,9] and target value for eg. 11. the program then should generate change from the list i.e 5, 6 =11
+#Code is incomplete as of now for the second part
 
 
 currency = []
