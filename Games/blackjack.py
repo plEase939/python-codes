@@ -1,9 +1,8 @@
+
 import random
 
 
 cards = []
-initiate = 0
-blackjack = 21
 
 #deck Manager WORKING
 def deckManager():
@@ -45,11 +44,11 @@ def cardDeal():
     
     
 
-
+#player chooses hit or stand
 def playHit():
     while True and sum(playerCards) < 21:
         playerAction = input("Hit or Stand ?: ")
-        if playerAction.upper() == "HIT" and sum(playerCards) <= 21:
+        if playerAction.upper() == "HIT" and sum(playerCards) <= 21 or playerAction.upper() == "H" and sum(playerCards) <= 21:
             tempCard = random.choice(cards)
             if tempCard == "ace":
                 cards.remove("ace")
@@ -63,8 +62,7 @@ def playHit():
             break
             
 
-
-    
+#If player gets 21 this program runs
 def blackJackCheck():
     if sum(playerCards) == sum(houseCards):
         print("Push! It's a DRAW")
@@ -73,6 +71,7 @@ def blackJackCheck():
         print("Dealer Had :")
         print(houseCards)
 
+#Dealer's turn after player stands
 def dealerHit():
     beat = sum(playerCards)
     while sum(houseCards) < sum(playerCards):
@@ -83,14 +82,15 @@ def dealerHit():
         else:
             cards.remove(randomCard)
             houseCards.append(randomCard)
-            print(" Dealer Got " +str(randomCard))
+            print(" Dealer Got " +str(randomCard) + " \n")
     print("Dealer total card value : " +str(sum(houseCards)) + "\n")
     if sum(houseCards) > sum(playerCards) and sum(houseCards) <= 21:
-        print("House Wins!")
+        print("House Wins!" +str(houseCards))
     else:
         print("You Win! \n")
         print("Dealer Bust! His Cards:  " + str(houseCards))
     print("\n")
+
             
 
 #Game Load
@@ -112,11 +112,11 @@ while True:
     houseCards = []
     playerCards = []
     cardDeal() #Randomly Give cards to house and player
-    if sum(playerCards) == blackjack:
+    if sum(playerCards) == 21:
         blackJackCheck()
     else:
         playHit()
-    if sum(playerCards) < 22:
-        dealerHit()
-    else:
-        print("You lose! its a Bust")
+        if sum(playerCards) < 21:
+            dealerHit()
+        else:
+            print("You Lose! It's a bust! \n")
