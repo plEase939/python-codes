@@ -1,7 +1,6 @@
 
 import random
 
-
 cards = []
 
 #deck Manager WORKING
