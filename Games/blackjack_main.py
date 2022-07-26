@@ -89,7 +89,7 @@ def dealerHit():
     if sum(houseCards) > sum(playerCards) and sum(houseCards) <= 21:
         print("House Wins!")
     else:
-        print("You Win!")
+        print("You Win! \n")
         print("Dealer Bust! His Cards:  " + str(houseCards))
     print("\n")
             
@@ -101,6 +101,7 @@ while True:
         initiate = True
         print("Shuffling Deck...")
         deckManager()
+        print(len(cards))
         
     else: 
         print("Game Over \nThank you for Playing <3")
