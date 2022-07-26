@@ -1,6 +1,5 @@
 import random
 
-
 cards = []
 initiate = 0
 blackjack = 21
