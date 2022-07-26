@@ -96,14 +96,12 @@ def dealerHit():
 while True:
     playerWantsToPlay = input("Play BlackJack? y/n : ")
     if playerWantsToPlay.upper() == "Y":
-        initiate = True
         print("Shuffling Deck...")
         deckManager()
         print(len(cards))
         
     else: 
         print("Game Over \nThank you for Playing <3")
-        initiate = False
         break
     
     #Game Logic
