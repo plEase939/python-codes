@@ -1,4 +1,5 @@
 import random
+from xml.etree.ElementTree import TreeBuilder
 
 
 cards = []
@@ -41,15 +42,27 @@ def cardDeal():
     if "ace" in playerCards:
         playerCards.remove("ace")
         playerCards.append(11)
-    print("Your card Value: " +str(sum(playerCards)))
+    print("Your card Value: " +str(sum(playerCards)) + "\n")
+    
     
 
 
 def playHit():
-    playerAction = input("Hit or Stand?: ")
-    if playerAction.upper() == "HIT":
-        newCard = random.choice(cards)
-        playerCards.append(newCard)
+    while True and sum(playerCards) < 21:
+        playerAction = input("Hit or Stand ?: ")
+        if playerAction.upper() == "HIT" and sum(playerCards) <= 21:
+            tempCard = random.choice(cards)
+            if tempCard == "ace":
+                cards.remove("ace")
+                tempCard = 1
+                playerCards.append(tempCard)
+            else:
+                cards.remove(tempCard)
+                playerCards.append(tempCard)
+            print("You got: " +str(tempCard)  + "\n Your Cards: " +str(playerCards) + "\n Your Card Value: " + str(sum(playerCards)))
+        else:
+            break
+            
 
 
     
@@ -61,6 +74,25 @@ def blackJackCheck():
         print("Dealer Had :")
         print(houseCards)
 
+def dealerHit():
+    beat = sum(playerCards)
+    while sum(houseCards) < sum(playerCards):
+        randomCard = random.choice(cards)
+        if randomCard == "ace":
+            randomCard = 1
+            print(" Dealer Got " +str(randomCard))
+        else:
+            cards.remove(randomCard)
+            houseCards.append(randomCard)
+            print(" Dealer Got " +str(randomCard))
+    print("Dealer total card value : " +str(sum(houseCards)) + "\n")
+    if sum(houseCards) > sum(playerCards) and sum(houseCards) <= 21:
+        print("House Wins!")
+    else:
+        print("You Win!")
+        print("Dealer Bust! His Cards:  " + str(houseCards))
+    print("\n")
+            
 
 #Game Load
 while True:
@@ -69,8 +101,6 @@ while True:
         initiate = True
         print("Shuffling Deck...")
         deckManager()
-        #houseCards.clear() depreciated
-        #playerCards.clear() depreciated
         
     else: 
         print("Game Over \nThank you for Playing <3")
@@ -82,10 +112,11 @@ while True:
     houseCards = []
     playerCards = []
     cardDeal() #Randomly Give cards to house and player
-    if 'ace' in playerCards:
-        playerCards.remove("ace")
-        playerCards.append(11)
     if sum(playerCards) == blackjack:
         blackJackCheck()
     else:
         playHit()
+    if sum(playerCards) < 22:
+        dealerHit()
+    else:
+        print("You lose! its a Bust")
