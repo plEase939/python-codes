@@ -1,5 +1,4 @@
 import random
-from xml.etree.ElementTree import TreeBuilder
 
 
 cards = []
