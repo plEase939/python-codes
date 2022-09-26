@@ -6,7 +6,6 @@
 currency =[]
 
 
-
 def currencyAdd(totalDenom):
     reset = input("Do you want to reset the database or add or remove a denomination(s)")
     if reset.upper() == "RESET":
