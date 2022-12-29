@@ -1,4 +1,4 @@
-# python-codes-basic
+# python-codes
 
 Learning Python and implementing it to solve problems.
 
