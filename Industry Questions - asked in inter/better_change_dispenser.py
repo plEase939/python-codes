@@ -1,27 +1,33 @@
 #This program was a industry question in an interview
 #Question is to enter Currency denominations for eg. [5,6,9] and target value for eg. 11. the program then should generate change from the list i.e 5, 6 =11
-curreny = []
-
-total_inputs = int(input("How many demoninations you want to enter?: "))
-for x in range(0,total_inputs):
-    print("Enter your ", x+1, "Currency: ")
-    user_input = int(input())
-    curreny.append(user_input)
-
-curreny.sort(reverse=True)
+currency = []
+user_input = input("Do you want to load default Indian Currency set? y/n: ")
+if user_input.lower() == "y":
+    currency = [500, 100, 50, 20, 10, 5, 2, 1]
+else:
+    total_inputs = int(input("How many denominations do you want to enter?: "))
+    for x in range(total_inputs):
+        user_input = int(input(f"Enter your {x+1} Currency denomination (as integer): "))
+        currency.append(user_input)
+    currency.sort(reverse=True)
 
 while True:
-    user_action = input("Continue? y/n ")
-    if user_action.upper() == "N":
-        break
-    else:
-        user_amount = int(input("Disperse change for the amount of: "))
+    try:
+        user_input = input("Disperse change for the amount of or type 0 to exit: ")
+        if user_input == "0":
+            break
+        user_amount = int(user_input)
+        
         temp = user_amount
         index = 0
         while temp > 0:
             i = 0
-            while temp >= curreny[index]:
-                temp = temp - curreny[index]
+            while temp >= currency[index]:
+                temp -= currency[index]
                 i += 1
-            print(i, "Note(s) of ", curreny[index])
+            if i > 0:
+                print(f"{i} Note(s) of {currency[index]}")
             index += 1
+    except ValueError:
+        print("Invalid input. Please enter a number.")
+        continue
