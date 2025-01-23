@@ -11,8 +11,8 @@ for x in range(0,total_inputs):
 curreny.sort(reverse=True)
 
 while True:
-    user_action = input("Continue? Y/n ")
-    if user_action.upper() != "Y":
+    user_action = input("Continue? y/n ")
+    if user_action.upper() == "N":
         break
     else:
         user_amount = int(input("Disperse change for the amount of: "))
