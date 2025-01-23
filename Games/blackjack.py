@@ -1,119 +1,107 @@
-
 import random
 
+# Global Variables
 cards = []
+houseCards = []
+playerCards = []
 
-#deck Manager WORKING
+# Create the deck with values
 def deckManager():
-    count = 1
+    global cards
     cards.clear()
-    while count <= 32:
-        cards.append("ace")
-        cards.append(10)
-        cards.append(10)
-        cards.append(10)
-        n = 2
-        while n <= 10:
-            cards.append(n)
-            n += 1
+    values = ["ace", 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]  # 10 is repeated for Jack, Queen, King
+    for _ in range(4):  # 4 suits
+        cards.extend(values)
 
-        count += 1
-
-#cards Dealing  WORKING
+# Deal cards to player and house
 def cardDeal():
+    global houseCards, playerCards
     houseCards.clear()
     playerCards.clear()
-    for deal in range(1, 2):
-        for houseDeal in range (0, 2):
-            randomHouse = random.choice(cards)
-            houseCards.append(randomHouse)
-            cards.remove(randomHouse)
-            randomPlayer = random.choice(cards)
-            playerCards.append(randomPlayer)
-            cards.remove(randomPlayer)
-    print("Dealer has X and " +str(houseCards[1]))
-    if 'ace' in houseCards:
-        houseCards.remove("ace")
-        houseCards.append(11)
-    print("You have " +str(playerCards[0]) + " " + str(playerCards[1]))
-    if "ace" in playerCards:
-        playerCards.remove("ace")
-        playerCards.append(11)
-    print("Your card Value: " +str(sum(playerCards)) + "\n")
     
+    for _ in range(2):  # Deal 2 cards to player and house
+        houseCards.append(random.choice(cards))
+        cards.remove(houseCards[-1])
+        playerCards.append(random.choice(cards))
+        cards.remove(playerCards[-1])
     
+    print("Dealer has X and " + str(houseCards[1]))
+    print("You have " + str(playerCards[0]) + " " + str(playerCards[1]))
+    print("Your card value: " + str(calculateValue(playerCards)) + "\n")
 
-#player chooses hit or stand
+# Calculate the value of a hand
+def calculateValue(hand):
+    value = 0
+    ace_count = 0
+    for card in hand:
+        if card == "ace":
+            value += 11
+            ace_count += 1
+        else:
+            value += card
+    while value > 21 and ace_count > 0:
+        value -= 10  # Adjust for aces as 1 instead of 11
+        ace_count -= 1
+    return value
+
+# Player's decision to hit or stand
 def playHit():
-    while True and sum(playerCards) < 21:
-        playerAction = input("Hit or Stand ?: ")
-        if playerAction.upper() == "HIT" and sum(playerCards) <= 21 or playerAction.upper() == "H" and sum(playerCards) <= 21:
-            tempCard = random.choice(cards)
-            if tempCard == "ace":
-                cards.remove("ace")
-                tempCard = 1
-                playerCards.append(tempCard)
-            else:
-                cards.remove(tempCard)
-                playerCards.append(tempCard)
-            print("You got: " +str(tempCard)  + "\n Your Cards: " +str(playerCards) + "\n Your Card Value: " + str(sum(playerCards)))
-        else:
+    while True and calculateValue(playerCards) < 21:
+        playerAction = input("Hit or Stand ?: ").strip().upper()
+        if playerAction == "HIT" or playerAction == "H":
+            new_card = random.choice(cards)
+            cards.remove(new_card)
+            playerCards.append(new_card)
+            print(f"You got: {new_card}")
+            print(f"Your Cards: {playerCards} \nYour Card Value: {calculateValue(playerCards)}")
+        elif playerAction == "STAND" or playerAction == "S":
             break
-            
-
-#If player gets 21 this program runs
-def blackJackCheck():
-    if sum(playerCards) == sum(houseCards):
-        print("Push! It's a DRAW")
-    else:
-        print("Blackjack! YOU WIN!")
-        print("Dealer Had :")
-        print(houseCards)
-
-#Dealer's turn after player stands
-def dealerHit():
-    beat = sum(playerCards)
-    while sum(houseCards) < sum(playerCards):
-        randomCard = random.choice(cards)
-        if randomCard == "ace":
-            randomCard = 1
-            print(" Dealer Got " +str(randomCard))
         else:
-            cards.remove(randomCard)
-            houseCards.append(randomCard)
-            print(" Dealer Got " +str(randomCard) + " \n")
-    print("Dealer total card value : " +str(sum(houseCards)) + "\n")
-    if sum(houseCards) > sum(playerCards) and sum(houseCards) <= 21:
-        print("House Wins!" +str(houseCards))
+            print("Invalid choice. Please enter 'Hit' or 'Stand'.")
+
+# Check for Blackjack
+def blackJackCheck():
+    if calculateValue(playerCards) == 21:
+        print("Blackjack! YOU WIN!")
     else:
-        print("You Win! \n")
-        print("Dealer Bust! His Cards:  " + str(houseCards))
-    print("\n")
+        print("Dealer's turn...")
 
-            
+# Dealer's turn
+def dealerHit():
+    while calculateValue(houseCards) < 17:  # Dealer hits until the value is 17 or more
+        new_card = random.choice(cards)
+        cards.remove(new_card)
+        houseCards.append(new_card)
+        print(f"Dealer got: {new_card}")
+    dealer_value = calculateValue(houseCards)
+    print(f"Dealer's card value: {dealer_value}")
+    
+    if dealer_value > 21:
+        print("Dealer Busts! You Win!")
+    elif dealer_value >= calculateValue(playerCards):
+        print(f"Dealer Wins! Dealer's cards: {houseCards}")
+    else:
+        print(f"You Win! Dealer's cards: {houseCards}")
 
-#Game Load
+# Game loop
 while True:
-    playerWantsToPlay = input("Play BlackJack? y/n : ")
-    if playerWantsToPlay.upper() == "Y":
+    playerWantsToPlay = input("Play Blackjack? y/n : ").strip().upper()
+    if playerWantsToPlay == "Y":
         print("Shuffling Deck...")
         deckManager()
-        print(len(cards))
+        print(f"Cards remaining: {len(cards)}")
         
-    else: 
-        print("Game Over \nThank you for Playing <3")
-        break
-    
-    #Game Logic
-    #1 player 1 house
-    houseCards = []
-    playerCards = []
-    cardDeal() #Randomly Give cards to house and player
-    if sum(playerCards) == 21:
-        blackJackCheck()
-    else:
-        playHit()
-        if sum(playerCards) < 21:
-            dealerHit()
+        # Start the game
+        cardDeal()
+        
+        if calculateValue(playerCards) == 21:
+            blackJackCheck()
         else:
-            print("You Lose! It's a bust! \n")
+            playHit()
+            if calculateValue(playerCards) <= 21:
+                dealerHit()
+            else:
+                print("You Lose! It's a bust! \n")
+    else:
+        print("Game Over \nThank you for playing <3")
+        break
